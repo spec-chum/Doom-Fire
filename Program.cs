@@ -12,8 +12,6 @@ internal static class Program
     const int WindowWidth = CanvasWidth * Scale;
     const int WindowHeight = CanvasHeight * Scale;
 
-    static readonly Random random = new();
-
     static void Main()
     {
         ReadOnlySpan<Color> colors = [
@@ -100,17 +98,17 @@ internal static class Program
     {
         for (int x = 0; x < CanvasWidth; x++)
         {
-            for (int y = 1; y < CanvasHeight; y++)
+            for (int y = CanvasWidth; y < buffer.Length; y += CanvasWidth)
             {
-                int src = (y * CanvasWidth) + x;
+                int src = y + x;
                 int pixel = buffer[src];
                 if (pixel == 0)
                 {
-                    buffer[src - CanvasWidth] = 0;
+                    buffer[src - CanvasWidth] = pixel;
                 }
                 else
                 {
-                    int rand = random.Next(4);
+                    int rand = Random.Shared.Next(4);
                     int dst = 1 + src - rand;
                     buffer[dst - CanvasWidth] = pixel - (rand & 1);
                 }
